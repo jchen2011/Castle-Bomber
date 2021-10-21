@@ -125,24 +125,3 @@ int[][] gooiBom(int[][] spelBord, int kolomNr, int rijNr) {
   }
   return spelBord;
 }
-
-//void gooiBom() {
-//  for (int rijTeller = 0; rijTeller < spelBord.length; rijTeller++) {
-//    for (int kolomTeller = 0; kolomTeller < spelBord[rijTeller].length; kolomTeller++) {
-//      boolean waarheid = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller, rijTeller);
-//      if (waarheid) {
-//        if (spelBord[rijTeller][kolomTeller] < 100) {
-//          spelBord[rijTeller][kolomTeller] += 100;
-//        } else if (rijTeller - 1 >= 0 && rijTeller - 1 <= spelBord.length - 1 && spelBord[rijTeller-1][kolomTeller] < 100) {
-//          spelBord[rijTeller][kolomTeller] += 100;
-//        } else if (rijTeller + 1 >= 0 && rijTeller + 1 <= spelBord.length - 1 && spelBord[rijTeller+1][kolomTeller] < 100) {
-//          spelBord[rijTeller][kolomTeller] += 100;
-//        } else if (kolomTeller - 1 >= 0 && kolomTeller - 1 <= spelBord[0].length - 1 && spelBord[rijTeller][kolomTeller - 1] < 100) {
-//          spelBord[rijTeller][kolomTeller] += 100;
-//        } else if (kolomTeller + 1 >= 0 && kolomTeller + 1 <= spelBord[0].length - 1 && spelBord[rijTeller][kolomTeller + 1] < 100) {
-//          spelBord[rijTeller][kolomTeller] += 100;
-//        }
-//      }
-//    }
-//  }
-//}
