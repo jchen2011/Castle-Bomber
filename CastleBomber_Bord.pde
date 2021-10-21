@@ -19,6 +19,8 @@ final int SCHAT = 1;
 final int BOMMENDEPOTS = 2;
 final int KONING = 3;
 
+final int TOON_VAK = -100;
+
 int[][] spelBord = new int[bordGrootte][bordGrootte];
 
 
@@ -33,18 +35,14 @@ void toonSpelbord(int[][] spelBord) {
       int x = (kolomTeller * breedte) + margeLinks;
       int y = (rijTeller * hoogte) + margeBoven;
       rect(x, y, breedte, hoogte);
-      boolean waarheid = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller, rijTeller);
-      if (waarheid) {
-        println("yo");
-        if (spelBord[rijTeller][kolomTeller] == LEEG) {
-          image(leeg, x, y, breedte, hoogte);
-        } else if (spelBord[rijTeller][kolomTeller] == SCHAT) {
-          image(schat, x, y, breedte, hoogte);
-        } else if (spelBord[rijTeller][kolomTeller] == BOMMENDEPOTS) {
-          image(bommenDepots, x, y, breedte, hoogte);
-        } else if (spelBord[rijTeller][kolomTeller] == KONING) {
-          image(koning, x, y, breedte, hoogte);
-        }
+      if (spelBord[rijTeller][kolomTeller] == LEEG) {
+        image(leeg, x, y, breedte, hoogte);
+      } else if (spelBord[rijTeller][kolomTeller] == SCHAT) {
+        image(schat, x, y, breedte, hoogte);
+      } else if (spelBord[rijTeller][kolomTeller] == BOMMENDEPOTS) {
+        image(bommenDepots, x, y, breedte, hoogte);
+      } else if (spelBord[rijTeller][kolomTeller] == KONING) {
+        image(koning, x, y, breedte, hoogte);
       }
     }
   }
@@ -57,7 +55,7 @@ int[][] maakSpelBord (int[][] spelBord) {
   int plaatsElementenIndex = 0;
 
   for (int i = 0; i < getallen.length; i++) {
-    getallen[i] = 0;
+    getallen[i] = 100;
   }
 
   for (int i = 0; i < aantalSchatten; i++) {
@@ -106,23 +104,45 @@ int[] shuffleArray(int getallen[], int nGetallen) {
   return getallen;
 }
 
-void gooiBom() {
-  for (int rijTeller = 0; rijTeller < spelBord.length; rijTeller++) {
-    for (int kolomTeller = 0; kolomTeller < spelBord[rijTeller].length; kolomTeller++) {
-      boolean waarheid = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller, rijTeller);
-      if (waarheid) {
-        if (spelBord[rijTeller][kolomTeller] < 100) {
-          spelBord[rijTeller][kolomTeller] += 100;
-        } else if (rijTeller - 1 >= 0 && rijTeller - 1 <= spelBord.length - 1 && spelBord[rijTeller-1][kolomTeller] < 100) {
-          spelBord[rijTeller][kolomTeller] += 100;
-        } else if (rijTeller + 1 >= 0 && rijTeller + 1 <= spelBord.length - 1 && spelBord[rijTeller+1][kolomTeller] < 100) {
-          spelBord[rijTeller][kolomTeller] += 100;
-        } else if (kolomTeller - 1 >= 0 && kolomTeller - 1 <= spelBord[0].length - 1 && spelBord[rijTeller][kolomTeller - 1] < 100) {
-          spelBord[rijTeller][kolomTeller] += 100;
-        } else if (kolomTeller + 1 >= 0 && kolomTeller + 1 <= spelBord[0].length - 1 && spelBord[rijTeller][kolomTeller + 1] < 100) {
-          spelBord[rijTeller][kolomTeller] += 100;
-        }
-      }
+int[][] gooiBom(int[][] spelBord, int kolomNr, int rijNr) {
+  boolean ja = kolomNr > 0 && rijNr > 0;
+  if (ja) {
+    if (spelBord[rijNr][kolomNr] >= 100) {
+      spelBord[rijNr][kolomNr] -= 100;
+    } 
+    if (rijNr - 1 >= 0 && rijNr - 1 <= spelBord.length - 1 && spelBord[rijNr-1][kolomNr] > 100) {
+      spelBord[rijNr - 1][kolomNr] -= 100;
+    }
+    if (rijNr + 1 >= 0 && rijNr + 1 <= spelBord.length - 1 && spelBord[rijNr+1][kolomNr] > 100) {
+      spelBord[rijNr + 1][kolomNr] -= 100;
+    }
+    if (kolomNr - 1 >= 0 && kolomNr - 1 <= spelBord[0].length - 1 && spelBord[rijNr][kolomNr - 1] > 100) {
+      spelBord[rijNr][kolomNr - 1] -= 100;
+    }
+    if (kolomNr + 1 >= 0 && kolomNr + 1 <= spelBord[0].length - 1 && spelBord[rijNr][kolomNr + 1] > 100) {
+      spelBord[rijNr][kolomNr + 1] -= 100;
     }
   }
+  return spelBord;
 }
+
+//void gooiBom() {
+//  for (int rijTeller = 0; rijTeller < spelBord.length; rijTeller++) {
+//    for (int kolomTeller = 0; kolomTeller < spelBord[rijTeller].length; kolomTeller++) {
+//      boolean waarheid = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller, rijTeller);
+//      if (waarheid) {
+//        if (spelBord[rijTeller][kolomTeller] < 100) {
+//          spelBord[rijTeller][kolomTeller] += 100;
+//        } else if (rijTeller - 1 >= 0 && rijTeller - 1 <= spelBord.length - 1 && spelBord[rijTeller-1][kolomTeller] < 100) {
+//          spelBord[rijTeller][kolomTeller] += 100;
+//        } else if (rijTeller + 1 >= 0 && rijTeller + 1 <= spelBord.length - 1 && spelBord[rijTeller+1][kolomTeller] < 100) {
+//          spelBord[rijTeller][kolomTeller] += 100;
+//        } else if (kolomTeller - 1 >= 0 && kolomTeller - 1 <= spelBord[0].length - 1 && spelBord[rijTeller][kolomTeller - 1] < 100) {
+//          spelBord[rijTeller][kolomTeller] += 100;
+//        } else if (kolomTeller + 1 >= 0 && kolomTeller + 1 <= spelBord[0].length - 1 && spelBord[rijTeller][kolomTeller + 1] < 100) {
+//          spelBord[rijTeller][kolomTeller] += 100;
+//        }
+//      }
+//    }
+//  }
+//}

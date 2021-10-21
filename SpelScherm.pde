@@ -3,10 +3,9 @@ final int ONGELDIG = -1;
 void toonSpelScherm() {
   background(255);
   println("IN SPELSCHERM");
-  gooiBom();
   maakSpelBord(spelBord);
   toonSpelbord(spelBord);
-  for(int i = 0; i < spelBord.length; i++) {
+  for (int i = 0; i < spelBord.length; i++) {
     for (int j = 0; j < spelBord[i].length; j++) {
       printArray(spelBord[i][j]);
     }
@@ -16,8 +15,8 @@ void toonSpelScherm() {
 void spelSchermMuisKlik(int muisX, int muisY) {
   int kolomNr = bepaalKolomNummer(muisX);
   int rijNr = bepaalRijNummer(muisY);
-
-  toonKlikResultaat(kolomNr, rijNr);
+  spelBord = gooiBom(spelBord, kolomNr, rijNr);
+  toonSpelbord(spelBord);
 }
 
 void toonKlikResultaat(int kolomNr, int rijNr) {
