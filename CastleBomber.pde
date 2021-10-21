@@ -15,6 +15,10 @@ void settings() {
 
 void setup() {
   background(0);
+  bommenDepots = loadImage("bommenDepots.png");
+  koning = loadImage("koning.jpg");
+  schat = loadImage("schat.png");
+  leeg = loadImage("leeg.jpg");
 }
 
 void draw() {

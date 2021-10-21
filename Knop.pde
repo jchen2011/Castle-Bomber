@@ -37,18 +37,28 @@ void tekenRij(int[] array, int y) {
 
     int tekstX = balkX + (blokGrootte / 2);
     int tekstY = y + (blokGrootte / 2);
-    
+
     boolean blokX = mouseX > balkX && mouseX < balkX + blokGrootte;
     boolean blokY = mouseY > y && mouseY < y + blokGrootte;
-    
+
     fill(PAARS);
-    
+
     if (blokX && blokY) {
       fill(GROEN);
     } 
-    
+
     textSize(30);   // TODO: tekstgrootte meegeven
     textAlign(CENTER, CENTER);
     text(array[teller], tekstX, tekstY);
   }
+}
+
+boolean bepaalIsBinnenVeld(int muisX, int muisY, int breedteVeld, int hoogteVeld, int kolomTeller, int rijTeller) {
+  int veldNummerKolom = (breedteVeld * kolomTeller) + margeLinks;
+  int veldNummerRij = (hoogteVeld * rijTeller) + margeBoven;
+
+  boolean blokX = (muisX > veldNummerKolom && muisX < veldNummerKolom + breedteVeld);
+  boolean blokY = (muisY > veldNummerRij && muisY < veldNummerRij + hoogteVeld);
+  boolean waarheid = blokX && blokY;
+  return waarheid;
 }

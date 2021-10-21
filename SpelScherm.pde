@@ -3,6 +3,7 @@ final int ONGELDIG = -1;
 void toonSpelScherm() {
   background(255);
   println("IN SPELSCHERM");
+  gooiBom();
   maakSpelBord(spelBord);
   toonSpelbord(spelBord);
   for(int i = 0; i < spelBord.length; i++) {

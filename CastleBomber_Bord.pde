@@ -25,9 +25,6 @@ int[][] spelBord = new int[bordGrootte][bordGrootte];
 void toonSpelbord(int[][] spelBord) {
   background(0);
 
-  int vierkantKleur = #00FF00;
-  int vierkantKleur2 = #FFFFFF;
-
   int aantalRijen = spelBord.length;
   int aantalKolommen = spelBord[0].length;
 
@@ -35,21 +32,19 @@ void toonSpelbord(int[][] spelBord) {
     for (int kolomTeller = 0; kolomTeller < aantalKolommen; kolomTeller++) {
       int x = (kolomTeller * breedte) + margeLinks;
       int y = (rijTeller * hoogte) + margeBoven;
-      if (spelBord[rijTeller][kolomTeller] >= 100) {
-        fill(vierkantKleur2);
-      } else {
-        fill(vierkantKleur);
-      }
       rect(x, y, breedte, hoogte);
-      //checkBord(spelBord, rijTeller, kolomTeller, x, y, breedte, hoogte);
-      if (spelBord[rijTeller][kolomTeller] == LEEG) {
-        image(leeg, x, y, breedte, hoogte);
-      } else if (spelBord[rijTeller][kolomTeller] == SCHAT) {
-        image(schat, x, y, breedte, hoogte);
-      } else if (spelBord[rijTeller][kolomTeller] == BOMMENDEPOTS) {
-        image(bommenDepots, x, y, breedte, hoogte);
-      } else if (spelBord[rijTeller][kolomTeller] == KONING) {
-        image(koning, x, y, breedte, hoogte);
+      boolean waarheid = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller, rijTeller);
+      if (waarheid) {
+        println("yo");
+        if (spelBord[rijTeller][kolomTeller] == LEEG) {
+          image(leeg, x, y, breedte, hoogte);
+        } else if (spelBord[rijTeller][kolomTeller] == SCHAT) {
+          image(schat, x, y, breedte, hoogte);
+        } else if (spelBord[rijTeller][kolomTeller] == BOMMENDEPOTS) {
+          image(bommenDepots, x, y, breedte, hoogte);
+        } else if (spelBord[rijTeller][kolomTeller] == KONING) {
+          image(koning, x, y, breedte, hoogte);
+        }
       }
     }
   }
@@ -62,7 +57,7 @@ int[][] maakSpelBord (int[][] spelBord) {
   int plaatsElementenIndex = 0;
 
   for (int i = 0; i < getallen.length; i++) {
-    getallen[i] = 100;
+    getallen[i] = 0;
   }
 
   for (int i = 0; i < aantalSchatten; i++) {
@@ -74,9 +69,9 @@ int[][] maakSpelBord (int[][] spelBord) {
     getallen[plaatsElementenIndex] += BOMMENDEPOTS;
     plaatsElementenIndex++;
   }
-  
+
   plaatsElementenIndex++;
-  
+
   getallen[plaatsElementenIndex] += KONING;
 
   for (int rijTeller = 0; rijTeller < spelBord.length; rijTeller++) {
@@ -110,50 +105,24 @@ int[] shuffleArray(int getallen[], int nGetallen) {
 
   return getallen;
 }
-//void checkBord(int[][] spelBord, int rijTeller, int kolomTeller, int x, int y, int breedteVeld, int hoogteVeld) {
-//  switch (spelBord[rijTeller][kolomTeller]) {
-//  case 101:
-//    image(schat, x, y, breedteVeld, hoogteVeld); //schatten
-//    break;
-//  case 102: 
-//    image(bommenDepots, x, y, breedteVeld, hoogteVeld); //bomdepots
-//    break;
-//  case 103: 
-//    image(koning, x, y, breedteVeld, hoogteVeld); // koning
-//    spelToestand = EINDSCHERM;
-//    break;
 
-//  default:
-//    break;
-//  }
-//}
-
-//void plaatsItems(int item, int max) {
-//  for (int teller = 0; teller < max; teller++) {
-//    boolean gevonden = false;
-//    do {
-//      int randomRij = round(random(spelBord.length-1));
-//      int randomKolom = round(random(spelBord[0].length - 1));
-//      gevonden = (spelBord[randomKolom][randomRij] == LEEG);
-
-//      if (gevonden) {
-//        spelBord[randomKolom][randomRij] = item;
-//      }
-//    } while (!gevonden);
-//  }
-//}
-
-//void maakBord() {
-//  plaatsItems(SCHAT, aantalSchatten);
-//  plaatsItems(BOMMENDEPOTS, aantalBommen);
-//  plaatsItems(KONING, 1);
-//}
-
-//void gooiBom() {
-//  int aantalRijen = spelBord.length;
-//  int aantalKolommen = spelBord[0].length;
-//  for (int rijTeller = 0; rijTeller < aantalRijen; rijTeller++) {
-//    for (int kolomTeller = 0; kolomTeller < aantalKolommen; kolomTeller++) {
-//    }
-//  }
-//}
+void gooiBom() {
+  for (int rijTeller = 0; rijTeller < spelBord.length; rijTeller++) {
+    for (int kolomTeller = 0; kolomTeller < spelBord[rijTeller].length; kolomTeller++) {
+      boolean waarheid = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller, rijTeller);
+      if (waarheid) {
+        if (spelBord[rijTeller][kolomTeller] < 100) {
+          spelBord[rijTeller][kolomTeller] += 100;
+        } else if (rijTeller - 1 >= 0 && rijTeller - 1 <= spelBord.length - 1 && spelBord[rijTeller-1][kolomTeller] < 100) {
+          spelBord[rijTeller][kolomTeller] += 100;
+        } else if (rijTeller + 1 >= 0 && rijTeller + 1 <= spelBord.length - 1 && spelBord[rijTeller+1][kolomTeller] < 100) {
+          spelBord[rijTeller][kolomTeller] += 100;
+        } else if (kolomTeller - 1 >= 0 && kolomTeller - 1 <= spelBord[0].length - 1 && spelBord[rijTeller][kolomTeller - 1] < 100) {
+          spelBord[rijTeller][kolomTeller] += 100;
+        } else if (kolomTeller + 1 >= 0 && kolomTeller + 1 <= spelBord[0].length - 1 && spelBord[rijTeller][kolomTeller + 1] < 100) {
+          spelBord[rijTeller][kolomTeller] += 100;
+        }
+      }
+    }
+  }
+}
