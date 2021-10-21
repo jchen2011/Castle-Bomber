@@ -105,7 +105,9 @@ int[] shuffleArray(int getallen[], int nGetallen) {
 }
 
 int[][] gooiBom(int[][] spelBord, int kolomNr, int rijNr) {
-  boolean ja = kolomNr > 0 && rijNr > 0;
+  kolomNr -= 1;
+  rijNr -= 1;
+  boolean ja = kolomNr >= 0 && rijNr >=   0;
   if (ja) {
     if (spelBord[rijNr][kolomNr] >= 100) {
       spelBord[rijNr][kolomNr] -= 100;
