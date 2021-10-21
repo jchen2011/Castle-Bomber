@@ -110,16 +110,16 @@ int[][] gooiBom(int[][] spelBord, int kolomNr, int rijNr) {
     if (spelBord[rijNr][kolomNr] >= 100) {
       spelBord[rijNr][kolomNr] -= 100;
     } 
-    if (rijNr - 1 >= 0 && rijNr - 1 <= spelBord.length - 1 && spelBord[rijNr-1][kolomNr] > 100) {
+    if (rijNr - 1 >= 0 && rijNr - 1 <= spelBord.length - 1 && spelBord[rijNr-1][kolomNr] >= 100) {
       spelBord[rijNr - 1][kolomNr] -= 100;
     }
-    if (rijNr + 1 >= 0 && rijNr + 1 <= spelBord.length - 1 && spelBord[rijNr+1][kolomNr] > 100) {
+    if (rijNr + 1 >= 0 && rijNr + 1 <= spelBord.length - 1 && spelBord[rijNr+1][kolomNr] >= 100) {
       spelBord[rijNr + 1][kolomNr] -= 100;
     }
-    if (kolomNr - 1 >= 0 && kolomNr - 1 <= spelBord[0].length - 1 && spelBord[rijNr][kolomNr - 1] > 100) {
+    if (kolomNr - 1 >= 0 && kolomNr - 1 <= spelBord[0].length - 1 && spelBord[rijNr][kolomNr - 1] >= 100) {
       spelBord[rijNr][kolomNr - 1] -= 100;
     }
-    if (kolomNr + 1 >= 0 && kolomNr + 1 <= spelBord[0].length - 1 && spelBord[rijNr][kolomNr + 1] > 100) {
+    if (kolomNr + 1 >= 0 && kolomNr + 1 <= spelBord[0].length - 1 && spelBord[rijNr][kolomNr + 1] >= 100) {
       spelBord[rijNr][kolomNr + 1] -= 100;
     }
   }
