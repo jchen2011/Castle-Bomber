@@ -1,6 +1,9 @@
 int aantalSchatten = 15;
 int aantalBommendepots = 6;
 
+int aantalScore = 0;
+int aantalBommen = 10;
+
 int margeLinks = 200;
 int margeBoven = 100;
 
@@ -23,26 +26,51 @@ final int TOON_VAK = -100;
 
 int[][] spelBord = new int[bordGrootte][bordGrootte];
 
-
 void toonSpelbord(int[][] spelBord) {
   background(0);
-
+  aantalBommen -= 1;
   int aantalRijen = spelBord.length;
   int aantalKolommen = spelBord[0].length;
+
+  int marge = 200;
+  int tekstX = schermBreedte / 2;
+  int tekstY = 50;
+
+  String aantalScoreTekst = "Aantal score: " + aantalScore;
+  String aantalBommenTekst = "Aantal bommen: " + aantalBommen;
+  text(aantalScoreTekst, tekstX - marge, tekstY);
+  text(aantalBommenTekst, tekstX + marge, tekstY);
 
   for (int rijTeller = 0; rijTeller < aantalRijen; rijTeller++) {
     for (int kolomTeller = 0; kolomTeller < aantalKolommen; kolomTeller++) {
       int x = (kolomTeller * breedte) + margeLinks;
       int y = (rijTeller * hoogte) + margeBoven;
       rect(x, y, breedte, hoogte);
-      if (spelBord[rijTeller][kolomTeller] == LEEG) {
+      //if (spelBord[rijTeller][kolomTeller] == LEEG) {
+      //  image(leeg, x, y, breedte, hoogte);
+      //} else if (spelBord[rijTeller][kolomTeller] == SCHAT) {
+      //  image(schat, x, y, breedte, hoogte);
+      //} else if (spelBord[rijTeller][kolomTeller] == BOMMENDEPOTS) {
+      //  image(bommenDepots, x, y, breedte, hoogte);
+      //} else if (spelBord[rijTeller][kolomTeller] == KONING) {
+      //  image(koning, x, y, breedte, hoogte);
+      //}
+      switch(spelBord[rijTeller][kolomTeller]) {
+      case LEEG:
         image(leeg, x, y, breedte, hoogte);
-      } else if (spelBord[rijTeller][kolomTeller] == SCHAT) {
+        break;
+      case SCHAT:
         image(schat, x, y, breedte, hoogte);
-      } else if (spelBord[rijTeller][kolomTeller] == BOMMENDEPOTS) {
+        aantalScore++;
+        break;
+      case BOMMENDEPOTS:
         image(bommenDepots, x, y, breedte, hoogte);
-      } else if (spelBord[rijTeller][kolomTeller] == KONING) {
+        break;
+      case KONING:
         image(koning, x, y, breedte, hoogte);
+        break;
+      default:
+        break;
       }
     }
   }

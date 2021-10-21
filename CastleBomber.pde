@@ -42,7 +42,7 @@ void draw() {
   }
 }
 
-void mouseClicked() {
+void mousePressed() {
   int muisX = mouseX;
   int muisY = mouseY;
   

@@ -52,13 +52,3 @@ void tekenRij(int[] array, int y) {
     text(array[teller], tekstX, tekstY);
   }
 }
-
-boolean bepaalIsBinnenVeld(int muisX, int muisY, int breedteVeld, int hoogteVeld, int kolomTeller, int rijTeller) {
-  int veldNummerKolom = (breedteVeld * kolomTeller) + margeLinks;
-  int veldNummerRij = (hoogteVeld * rijTeller) + margeBoven;
-
-  boolean blokX = (muisX > veldNummerKolom && muisX < veldNummerKolom + breedteVeld);
-  boolean blokY = (muisY > veldNummerRij && muisY < veldNummerRij + hoogteVeld);
-  boolean waarheid = blokX && blokY;
-  return waarheid;
-}

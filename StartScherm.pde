@@ -15,7 +15,7 @@ int[] startKnop = {rijX * 4, 400, 350, blokGrootte, GRIJS};
 
 
 void toonStartScherm() {
-  println("IN STARTSCHERM");
+  //println("IN STARTSCHERM");
   toonTekst();
   tekenKnop(startKnop, "Start spel");
   tekenRij(aantalSchattenArray, rijY);
