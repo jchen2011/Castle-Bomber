@@ -40,15 +40,40 @@ void tekenRij(int[] array, int y) {
 
     boolean blokX = mouseX > balkX && mouseX < balkX + blokGrootte;
     boolean blokY = mouseY > y && mouseY < y + blokGrootte;
-
+    
     fill(PAARS);
 
     if (blokX && blokY) {
       fill(GROEN);
+      println(array);
     } 
 
     textSize(30);   // TODO: tekstgrootte meegeven
     textAlign(CENTER, CENTER);
     text(array[teller], tekstX, tekstY);
   }
+}
+boolean bepaalIsBinnenKnop(int [] knop, int muisX, int muisY) {
+  int knopX = knop[X];
+  int knopY = knop[Y];
+  int knopBreedte = knop[BREEDTE];
+  int knopHoogte = knop[HOOGTE];
+  
+  boolean kloptX = (muisX >= knopX && muisX <= knopX + knopBreedte);
+  boolean kloptY = (muisY >= knopY && muisY <= knopY + knopHoogte);
+  boolean knopGeraakt = kloptX && kloptY;
+
+  return knopGeraakt;
+}
+
+boolean bepaalIsBinnenVeld(int muisX, int muisY, int breedteVeld, int hoogteVeld, int kolomTeller, int rijTeller) {
+  int veldNummerkolom = breedteVeld * kolomTeller;
+  int veldNummerRij = (hoogteVeld * rijTeller) + margeBoven;
+
+  boolean kloptkolom = (muisX > veldNummerkolom && muisX < veldNummerkolom + breedteVeld);
+  boolean kloptRij = (muisY > veldNummerRij && muisY < veldNummerRij + hoogteVeld);
+
+  boolean waarheid = kloptkolom && kloptRij;
+
+  return waarheid;
 }

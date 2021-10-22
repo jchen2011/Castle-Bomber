@@ -11,8 +11,8 @@ int rijX = 80;
 int rijY = 100;
 int blokGrootte = 75;
 
-int[] startKnop = {rijX * 4, 400, 350, blokGrootte, GRIJS};
-
+int[] startKnop = {rijX * 4, 400, 375, blokGrootte, GRIJS};
+int[] eindKnop = {325, 400, 350, blokGrootte, GRIJS};
 
 void toonStartScherm() {
   //println("IN STARTSCHERM");
@@ -23,12 +23,9 @@ void toonStartScherm() {
 } 
 
 void startSchermMuisKlik(int muisX, int muisY) {
-  boolean startKnopX = muisX >= rijX * 4 && muisX <= (rijX * 4) + 350;
-  boolean startKnopY = muisY >= 400 && muisY <= 400 + blokGrootte;
-  boolean startKnop = startKnopX && startKnopY;
-  if (startKnop) {
+  boolean startKnopGeraakt = bepaalIsBinnenKnop(startKnop, muisX, muisY);
+  if (startKnopGeraakt) {
     spelBord = maakSpelBord(spelBord);
     spelToestand = SPELSCHERM;
-    
   }
 }

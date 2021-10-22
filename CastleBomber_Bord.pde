@@ -1,5 +1,5 @@
-int aantalSchatten = 15;
-int aantalBommendepots = 6;
+int aantalSchatten = 15; // 15 default
+int aantalBommendepots = 6; // 6 default
 
 int aantalScore = 0;
 int aantalBommen = 10;
@@ -12,6 +12,8 @@ int bordGrootte = 10;
 int breedte = schermBreedte / (bordGrootte * 2);
 int hoogte = (schermHoogte - margeBoven) / (bordGrootte);
 
+boolean gewonnenKoning = false;
+
 PImage bommenDepots;
 PImage koning;
 PImage schat;
@@ -23,12 +25,13 @@ final int BOMMENDEPOTS = 2;
 final int KONING = 3;
 
 final int TOON_VAK = -100;
-
+final int WAARDE_VAK = 100;
 int[][] spelBord = new int[bordGrootte][bordGrootte];
+
 
 void toonSpelbord(int[][] spelBord) {
   background(0);
-  aantalBommen -= 1;
+
   int aantalRijen = spelBord.length;
   int aantalKolommen = spelBord[0].length;
 
@@ -40,39 +43,38 @@ void toonSpelbord(int[][] spelBord) {
   String aantalBommenTekst = "Aantal bommen: " + aantalBommen;
   text(aantalScoreTekst, tekstX - marge, tekstY);
   text(aantalBommenTekst, tekstX + marge, tekstY);
-
+  aantalBommen--;
   for (int rijTeller = 0; rijTeller < aantalRijen; rijTeller++) {
     for (int kolomTeller = 0; kolomTeller < aantalKolommen; kolomTeller++) {
-      int x = (kolomTeller * breedte) + margeLinks;
-      int y = (rijTeller * hoogte) + margeBoven;
+      int x = margeLinks + (kolomTeller * breedte);
+      int y = margeBoven + (rijTeller * hoogte);
+
       rect(x, y, breedte, hoogte);
-      //if (spelBord[rijTeller][kolomTeller] == LEEG) {
-      //  image(leeg, x, y, breedte, hoogte);
-      //} else if (spelBord[rijTeller][kolomTeller] == SCHAT) {
-      //  image(schat, x, y, breedte, hoogte);
-      //} else if (spelBord[rijTeller][kolomTeller] == BOMMENDEPOTS) {
-      //  image(bommenDepots, x, y, breedte, hoogte);
-      //} else if (spelBord[rijTeller][kolomTeller] == KONING) {
-      //  image(koning, x, y, breedte, hoogte);
-      //}
       switch(spelBord[rijTeller][kolomTeller]) {
       case LEEG:
         image(leeg, x, y, breedte, hoogte);
         break;
       case SCHAT:
         image(schat, x, y, breedte, hoogte);
-        aantalScore++;
         break;
       case BOMMENDEPOTS:
         image(bommenDepots, x, y, breedte, hoogte);
         break;
       case KONING:
         image(koning, x, y, breedte, hoogte);
+        spelToestand++;
+        gewonnenKoning = true;
+        opnieuwTekenen = true;    
         break;
       default:
         break;
       }
     }
+  }
+
+  if (aantalBommen < 0) {
+    spelToestand++;
+    opnieuwTekenen = true;
   }
 }
 
@@ -120,13 +122,13 @@ int[][] maakSpelBord (int[][] spelBord) {
 }
 
 // Shuffle als tip van Daniel  
-int[] shuffleArray(int getallen[], int nGetallen) {
-  for (int getalIndex = nGetallen-1; getalIndex > 0; getalIndex--) {
-    int randomIndex = int(random(getalIndex+1));
-    int temp = getallen[getalIndex];
+int[] shuffleArray(int getallen[], int nieuweGetallen) {
+  for (int indexGetal = nieuweGetallen-1; indexGetal > 0; indexGetal--) {
+    int randomIndexGetal = int(random(indexGetal+1));
+    int tijdelijk = getallen[indexGetal];
 
-    getallen[getalIndex] = getallen[randomIndex];
-    getallen[randomIndex] = temp;
+    getallen[indexGetal] = getallen[randomIndexGetal];
+    getallen[randomIndexGetal] = tijdelijk;
   }
 
   return getallen;
@@ -135,23 +137,39 @@ int[] shuffleArray(int getallen[], int nGetallen) {
 int[][] gooiBom(int[][] spelBord, int kolomNr, int rijNr) {
   kolomNr -= 1;
   rijNr -= 1;
-  boolean ja = kolomNr >= 0 && rijNr >=   0;
-  if (ja) {
+  int aantalRijen = spelBord.length;
+  int aantalKolommen = spelBord[0].length;
+  
+  int vorigeKolom = kolomNr - 1;
+  int volgendeKolom = kolomNr + 1;
+  int vorigeRij = rijNr - 1;
+  int volgendeRij = rijNr + 1;
+  
+  boolean binnenDeSpelBord = kolomNr >= 0 && rijNr >= 0;
+  
+  if (binnenDeSpelBord) {
     if (spelBord[rijNr][kolomNr] >= 100) {
       spelBord[rijNr][kolomNr] -= 100;
-    } 
-    if (rijNr - 1 >= 0 && rijNr - 1 <= spelBord.length - 1 && spelBord[rijNr-1][kolomNr] >= 100) {
-      spelBord[rijNr - 1][kolomNr] -= 100;
     }
-    if (rijNr + 1 >= 0 && rijNr + 1 <= spelBord.length - 1 && spelBord[rijNr+1][kolomNr] >= 100) {
-      spelBord[rijNr + 1][kolomNr] -= 100;
+    if (vorigeKolom >= 0 && vorigeKolom <= aantalKolommen - 1 && spelBord[rijNr][vorigeKolom] >= WAARDE_VAK) {
+      spelBord[rijNr][vorigeKolom] -= WAARDE_VAK;
     }
-    if (kolomNr - 1 >= 0 && kolomNr - 1 <= spelBord[0].length - 1 && spelBord[rijNr][kolomNr - 1] >= 100) {
-      spelBord[rijNr][kolomNr - 1] -= 100;
+    if (volgendeKolom >= 0 && volgendeKolom <= aantalKolommen - 1 && spelBord[rijNr][volgendeKolom] >= WAARDE_VAK) {
+      spelBord[rijNr][volgendeKolom] -= WAARDE_VAK;
     }
-    if (kolomNr + 1 >= 0 && kolomNr + 1 <= spelBord[0].length - 1 && spelBord[rijNr][kolomNr + 1] >= 100) {
-      spelBord[rijNr][kolomNr + 1] -= 100;
+    if (vorigeRij >= 0 && vorigeRij <= aantalRijen - 1 && spelBord[vorigeRij][kolomNr] >= WAARDE_VAK) {
+      spelBord[vorigeRij][kolomNr] -= WAARDE_VAK;
+    }
+    if (volgendeRij >= 0 && volgendeRij <= aantalRijen - 1 && spelBord[volgendeRij][kolomNr] >= WAARDE_VAK) {
+      spelBord[volgendeRij][kolomNr] -= WAARDE_VAK;
     }
   }
   return spelBord;
+}
+
+void resetWaarde() {
+  aantalSchatten = 15; // 15 default
+  aantalBommendepots = 6; // 6 default
+  aantalScore = 0;
+  aantalBommen = 10;
 }
