@@ -1,3 +1,4 @@
+// Eindscherm tonen
 void toonEindScherm() {
   println("IN EINDSCHERM");
   resultaatSpelBord(gewonnenKoning);

@@ -5,6 +5,7 @@ final int HOOGTE = 3;
 final int KLEUR = 4;
 final int VORM = 5;
 
+int tekstGrootte = 25;
 // Deze methode ontvangt een 1D array en een string als parameter en tekent vervolgens een knop
 void tekenKnop(int[] data, String tekst) {
   int x = data[X];
@@ -20,8 +21,8 @@ void tekenKnop(int[] data, String tekst) {
   fill(kleur);
   rect(x, y, breedte, hoogte);
 
-  fill(PAARS);  // TODO: tekstkleur meegeven
-  textSize(25);   // TODO: tekstgrootte meegeven
+  fill(PAARS);
+  textSize(tekstGrootte);
   textAlign(CENTER, CENTER);
   text(tekst, tekstX, tekstY);
 }
@@ -43,11 +44,9 @@ void tekenRij(int[] array, int y) {
     fill(PAARS);
 
     if (blokX && blokY) {
-      fill(GROEN);
-      println(array);
     } 
 
-    textSize(30);   // TODO: tekstgrootte meegeven
+    textSize(tekstGrootte); 
     textAlign(CENTER, CENTER);
     text(array[teller], tekstX, tekstY);
   }
@@ -65,17 +64,4 @@ boolean bepaalIsBinnenKnop(int [] knop, int muisX, int muisY) {
   boolean knopGeraakt = kloptX && kloptY;
 
   return knopGeraakt;
-}
-
-// ?
-boolean bepaalIsBinnenVeld(int muisX, int muisY, int breedteVeld, int hoogteVeld, int kolomTeller, int rijTeller) {
-  int veldNummerkolom = breedteVeld * kolomTeller;
-  int veldNummerRij = (hoogteVeld * rijTeller) + margeBoven;
-
-  boolean kloptkolom = (muisX > veldNummerkolom && muisX < veldNummerkolom + breedteVeld);
-  boolean kloptRij = (muisY > veldNummerRij && muisY < veldNummerRij + hoogteVeld);
-
-  boolean waarheid = kloptkolom && kloptRij;
-
-  return waarheid;
 }

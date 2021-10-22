@@ -11,15 +11,14 @@ int blokGrootte = 75;
 int[] startKnop = {rijX * 4, 400, 375, blokGrootte, GRIJS};
 int[] eindKnop = {325, 400, 350, blokGrootte, GRIJS};
 
+// De startscherm tonen door de switch case
 void toonStartScherm() {
   //println("IN STARTSCHERM");
-  toonTekstStart(aantalSchatten, aantalBommendepots);
+  image(kasteel, 0, 0, schermBreedte, schermHoogte);
   tekenKnop(startKnop, "Start spel");
-  tekenRij(aantalSchattenArray, rijY);
-  tekenRij(aantalBommendepotsArray, rijY + blokGrootte * 2);
 } 
 
-// Verwerkt een muisklik in de startscherm en kijkt vervolgens of je hebt geklikt op de startknop
+// Verwerkt een muisklik in het startscherm en kijkt vervolgens of je hebt geklikt op de startknop
 void startSchermMuisKlik(int muisX, int muisY) {
   boolean startKnopGeraakt = bepaalIsBinnenKnop(startKnop, muisX, muisY);
   if (startKnopGeraakt) {

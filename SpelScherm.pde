@@ -5,8 +5,9 @@ final int ONGELDIG = -1;
 int margeGridLinks = 200;
 int margeGridBoven = 100;
 
+// Het spelscherm tonen door de switch case
 void toonSpelScherm() {
-  background(255);
+  background(WIT);
   println("IN SPELSCHERM");
   maakSpelBord(spelBord);
   toonSpelbord(spelBord);
@@ -17,7 +18,7 @@ void toonSpelScherm() {
   }
 }
 
-// Verwerkt de muisklik in de spelscherm
+// Verwerkt de muisklik in het spelscherm
 void spelSchermMuisKlik(int muisX, int muisY) {
   int kolomNr = bepaalKolomNummer(muisX);
   int rijNr = bepaalRijNummer(muisY);
@@ -35,7 +36,7 @@ void toonKlikResultaat(int kolomNr, int rijNr) {
     println("Rij: " + rijNr + "   Kolom: " + kolomNr);
   }
 }
-// Deze methode returnt een kolomnummer
+// Deze methode return een kolomnummer
 int bepaalKolomNummer(int muisX) {
   int kolomNr = ONGELDIG;
 

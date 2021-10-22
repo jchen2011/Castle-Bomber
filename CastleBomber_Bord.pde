@@ -3,6 +3,7 @@ PImage bommenDepots;
 PImage koning;
 PImage schat;
 PImage leeg;
+PImage kasteel;
 
 // Instellingen voor schatten en bommendepots
 int aantalSchatten = 15; // 15 default
@@ -41,8 +42,8 @@ int[][] spelBord = new int[bordGrootte][bordGrootte];
 
 // Deze methode vertoont hoe de spelbord er moet gaan uitzien
 void toonSpelbord(int[][] spelBord) {
-  background(0);
-
+  background(ZWART);
+  
   int aantalRijen = spelBord.length;
   int aantalKolommen = spelBord[0].length;
 
@@ -50,21 +51,15 @@ void toonSpelbord(int[][] spelBord) {
   int tekstX = schermBreedte / 2;
   int tekstY = 50;
 
-  String aantalScoreTekst = "Aantal score: " + aantalScore;
-  String aantalBommenTekst = "Aantal bommen: " + aantalBommen;
-  text(aantalScoreTekst, tekstX - marge, tekstY);
-  text(aantalBommenTekst, tekstX + marge, tekstY);
+  
+  int originalMouseX = mouseX;
+  int originalMouseY = mouseY;
   aantalBommen--;
+  
   for (int rijTeller = 0; rijTeller < aantalRijen; rijTeller++) {
     for (int kolomTeller = 0; kolomTeller < aantalKolommen; kolomTeller++) {
       int x = margeLinks + (kolomTeller * breedte);
       int y = margeBoven + (rijTeller * hoogte);
-
-      boolean waarheid = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller, rijTeller);
-      boolean waarheid2 = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller - 1, rijTeller);
-      boolean waarheid3 = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller + 1, rijTeller);
-      boolean waarheid4 = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller, rijTeller - 1);
-      boolean waarheid5 = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller, rijTeller + 1);
 
       rect(x, y, breedte, hoogte);
       switch(spelBord[rijTeller][kolomTeller]) {
@@ -73,10 +68,15 @@ void toonSpelbord(int[][] spelBord) {
         break;
       case SCHAT:
         image(schat, x, y, breedte, hoogte);
+        if (isSchatInExplosie(originalMouseX, originalMouseY, kolomTeller+1, rijTeller+1)){
+        aantalScore++;
         }
         break;
       case BOMMENDEPOTS:
         image(bommenDepots, x, y, breedte, hoogte);
+        if (isBomInExplosie(originalMouseX, originalMouseY, kolomTeller+1, rijTeller+1)){
+        aantalBommen += 2;
+        }
         break;
       case KONING:
         image(koning, x, y, breedte, hoogte);
@@ -89,11 +89,35 @@ void toonSpelbord(int[][] spelBord) {
       }
     }
   }
-
+  
+  String aantalScoreTekst = "Aantal score: " + aantalScore;
+  String aantalBommenTekst = "Aantal bommen: " + aantalBommen;
+  text(aantalScoreTekst, tekstX - marge, tekstY);
+  text(aantalBommenTekst, tekstX + marge, tekstY);
   if (aantalBommen < 0) {
     spelToestand++;
     opnieuwTekenen = true;
   }
+}
+
+//Bekijk of schat in gooiBom zit
+boolean isSchatInExplosie(int originalMouseX, int originalMouseY, int kolom, int rij){
+int knr = bepaalKolomNummer(originalMouseX);
+int rnr = bepaalRijNummer(originalMouseY);
+
+print("k: " +abs(knr - kolom)); 
+print("r: " +abs(rnr - rij)); 
+return abs(knr - kolom) <= 1 && abs(rnr - rij) <= 1;
+}
+
+//Bekijk of bom in gooiBom zit
+boolean isBomInExplosie(int originalMouseX, int originalMouseY, int kolom, int rij){
+int knr = bepaalKolomNummer(originalMouseX);
+int rnr = bepaalRijNummer(originalMouseY);
+
+print("k: " +abs(knr - kolom)); 
+print("r: " +abs(rnr - rij)); 
+return abs(knr - kolom) <= 1 && abs(rnr - rij) <= 1;
 }
 
 // Deze methode voegt de elementen zoals schatten, bommendepots toe aan de array en gaat ze vervolgens shuffelen 
