@@ -1,14 +1,10 @@
 void toonEindScherm() {
   println("IN EINDSCHERM");
-  if(gewonnenKoning) {
-    text("Je hebt gewonnen, je hebt de koning gevonden", schermBreedte / 2, schermHoogte / 2);
-    gewonnenKoning = false;
-  } else {
-    text("Je hebt verloren", schermBreedte / 2, schermHoogte / 2);
-  }
+  resultaatSpelBord(gewonnenKoning);
   tekenKnop(eindKnop, "Opnieuw");
 }
 
+// Verwerkt een muisklik en bepaalt vervolgens of het de eindknop heeft geraakt.
 void eindSchermMuisKlik(int muisX, int muisY) {
   boolean eindKnopGeraakt = bepaalIsBinnenKnop(eindKnop, muisX, muisY);
   if (eindKnopGeraakt) {

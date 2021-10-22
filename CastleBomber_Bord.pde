@@ -1,34 +1,45 @@
-int aantalSchatten = 15; // 15 default
-int aantalBommendepots = 6; // 6 default
-
-int aantalScore = 0;
-int aantalBommen = 10;
-
-int margeLinks = 200;
-int margeBoven = 100;
-
-int bordGrootte = 10;
-
-int breedte = schermBreedte / (bordGrootte * 2);
-int hoogte = (schermHoogte - margeBoven) / (bordGrootte);
-
-boolean gewonnenKoning = false;
-
+// Afbeeldingen
 PImage bommenDepots;
 PImage koning;
 PImage schat;
 PImage leeg;
 
+// Instellingen voor schatten en bommendepots
+int aantalSchatten = 15; // 15 default
+int aantalBommendepots = 6; // 6 default
+
+// Score voor spelscherm en eindscherm
+int aantalScore = 0;
+int aantalBommen = 10;
+
+// Marge voor de grid
+int margeLinks = 200;
+int margeBoven = 100;
+
+// Grootte van bord die belangrijk is voor het aanmaken van 2D array spelbord
+int bordGrootte = 10;
+
+// Breedte en hoogte van het spelbord
+int breedte = schermBreedte / (bordGrootte * 2);
+int hoogte = (schermHoogte - margeBoven) / (bordGrootte);
+
+// Boolean om te weten of je de koning hebt gevonden
+boolean gewonnenKoning = false;
+
+// Getallen waarmee de blokjes in de grid geassocieerd meeworden
 final int LEEG = 0;
 final int SCHAT = 1;
 final int BOMMENDEPOTS = 2;
 final int KONING = 3;
 
+// Waardes die belangrijk zijn om een vak te laten zien
 final int TOON_VAK = -100;
 final int WAARDE_VAK = 100;
+
+// 2D Array aanmaken met grootte van bord
 int[][] spelBord = new int[bordGrootte][bordGrootte];
 
-
+// Deze methode vertoont hoe de spelbord er moet gaan uitzien
 void toonSpelbord(int[][] spelBord) {
   background(0);
 
@@ -49,6 +60,12 @@ void toonSpelbord(int[][] spelBord) {
       int x = margeLinks + (kolomTeller * breedte);
       int y = margeBoven + (rijTeller * hoogte);
 
+      boolean waarheid = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller, rijTeller);
+      boolean waarheid2 = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller - 1, rijTeller);
+      boolean waarheid3 = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller + 1, rijTeller);
+      boolean waarheid4 = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller, rijTeller - 1);
+      boolean waarheid5 = bepaalIsBinnenVeld(mouseX, mouseY, breedte, hoogte, kolomTeller, rijTeller + 1);
+
       rect(x, y, breedte, hoogte);
       switch(spelBord[rijTeller][kolomTeller]) {
       case LEEG:
@@ -56,14 +73,15 @@ void toonSpelbord(int[][] spelBord) {
         break;
       case SCHAT:
         image(schat, x, y, breedte, hoogte);
+        }
         break;
       case BOMMENDEPOTS:
         image(bommenDepots, x, y, breedte, hoogte);
         break;
       case KONING:
         image(koning, x, y, breedte, hoogte);
-        spelToestand++;
         gewonnenKoning = true;
+        spelToestand++;
         opnieuwTekenen = true;    
         break;
       default:
@@ -78,22 +96,23 @@ void toonSpelbord(int[][] spelBord) {
   }
 }
 
+// Deze methode voegt de elementen zoals schatten, bommendepots toe aan de array en gaat ze vervolgens shuffelen 
 int[][] maakSpelBord (int[][] spelBord) {
   int aantalGetallenArray = spelBord.length * spelBord[0].length;
   int[] getallen = new int[aantalGetallenArray];
 
   int plaatsElementenIndex = 0;
 
-  for (int i = 0; i < getallen.length; i++) {
-    getallen[i] = 100;
+  for (int teller = 0; teller < getallen.length; teller++) {
+    getallen[teller] = 100;
   }
 
-  for (int i = 0; i < aantalSchatten; i++) {
+  for (int teller = 0; teller < aantalSchatten; teller++) {
     getallen[plaatsElementenIndex] += SCHAT;
     plaatsElementenIndex++;
   }
 
-  for (int i = 0; i < aantalBommendepots; i++) {
+  for (int teller = 0; teller < aantalBommendepots; teller++) {
     getallen[plaatsElementenIndex] += BOMMENDEPOTS;
     plaatsElementenIndex++;
   }
@@ -110,9 +129,9 @@ int[][] maakSpelBord (int[][] spelBord) {
 
   getallen = shuffleArray(getallen, aantalGetallenArray);
   int teller = 0;
-  for (int i = 0; i < spelBord.length; i++) {
-    for (int j = 0; j < spelBord[i].length; j++) {
-      spelBord[i][j] = getallen[teller++];
+  for (int rijTeller = 0; rijTeller < spelBord.length; rijTeller++) {
+    for (int kolomTeller = 0; kolomTeller < spelBord[rijTeller].length; kolomTeller++) {
+      spelBord[rijTeller][kolomTeller] = getallen[teller++];
     }
   }
 
@@ -121,8 +140,8 @@ int[][] maakSpelBord (int[][] spelBord) {
   return spelBord;
 }
 
-// Shuffle als tip van Daniel  
-int[] shuffleArray(int getallen[], int nieuweGetallen) {
+// Shuffelen van een 1D-array, als tip van Daniel Roth. 
+int[] shuffleArray(int[] getallen, int nieuweGetallen) {
   for (int indexGetal = nieuweGetallen-1; indexGetal > 0; indexGetal--) {
     int randomIndexGetal = int(random(indexGetal+1));
     int tijdelijk = getallen[indexGetal];
@@ -132,21 +151,22 @@ int[] shuffleArray(int getallen[], int nieuweGetallen) {
   }
 
   return getallen;
-}
+}  
 
+// Bij deze methode krijg je als parameter de spelbord, kolomNr en rijNr gegeven en weet je welke blokje in de grid is aangeklikt.
 int[][] gooiBom(int[][] spelBord, int kolomNr, int rijNr) {
   kolomNr -= 1;
   rijNr -= 1;
   int aantalRijen = spelBord.length;
   int aantalKolommen = spelBord[0].length;
-  
+
   int vorigeKolom = kolomNr - 1;
   int volgendeKolom = kolomNr + 1;
   int vorigeRij = rijNr - 1;
   int volgendeRij = rijNr + 1;
-  
+
   boolean binnenDeSpelBord = kolomNr >= 0 && rijNr >= 0;
-  
+
   if (binnenDeSpelBord) {
     if (spelBord[rijNr][kolomNr] >= 100) {
       spelBord[rijNr][kolomNr] -= 100;
@@ -167,9 +187,23 @@ int[][] gooiBom(int[][] spelBord, int kolomNr, int rijNr) {
   return spelBord;
 }
 
+// Tekst voor eindscherm
+void resultaatSpelBord (boolean koning) {
+  String score = "Aantal score: " + aantalScore;
+  if (koning) {
+    text("Je hebt gewonnen, je hebt de koning gevonden", schermBreedte / 2, schermHoogte / 2);
+    text(score, schermBreedte / 2, schermHoogte / 2 + margeBoven);
+    gewonnenKoning = false;
+  } else {
+    text("Je hebt verloren", schermBreedte / 2, schermHoogte / 2);
+    text(score, schermBreedte / 2, schermHoogte / 2 - margeBoven);
+  }
+}
+
+// Reset alle waarde, zodat hij met default instellingen weer door kan gaan en nieuwe met de getallen van vorige game
 void resetWaarde() {
   aantalSchatten = 15; // 15 default
   aantalBommendepots = 6; // 6 default
-  aantalScore = 0;
-  aantalBommen = 10;
+  aantalScore = 0; // 0 default
+  aantalBommen = 10; // 10 default
 }

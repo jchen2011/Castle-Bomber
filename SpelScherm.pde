@@ -1,17 +1,23 @@
+// Constante voor een ongeldige waarde
 final int ONGELDIG = -1;
+
+// marge voor de grid
+int margeGridLinks = 200;
+int margeGridBoven = 100;
 
 void toonSpelScherm() {
   background(255);
   println("IN SPELSCHERM");
   maakSpelBord(spelBord);
   toonSpelbord(spelBord);
-  for (int i = 0; i < spelBord.length; i++) {
-    for (int j = 0; j < spelBord[i].length; j++) {
-      printArray(spelBord[i][j]);
+  for (int rijTeller = 0; rijTeller < spelBord.length; rijTeller++) {
+    for (int kolomTeller = 0; kolomTeller < spelBord[rijTeller].length; kolomTeller++) {
+      printArray(spelBord[rijTeller][kolomTeller]);
     }
   }
 }
 
+// Verwerkt de muisklik in de spelscherm
 void spelSchermMuisKlik(int muisX, int muisY) {
   int kolomNr = bepaalKolomNummer(muisX);
   int rijNr = bepaalRijNummer(muisY);
@@ -19,6 +25,7 @@ void spelSchermMuisKlik(int muisX, int muisY) {
   toonSpelbord(spelBord);
 }
 
+// Deze methode laat zien welke rijnummer en kolomnummer het zijn. Bij ongeldige klik, komt er een ongeldige rij of kolom tevoorschijn
 void toonKlikResultaat(int kolomNr, int rijNr) {
   boolean ongeldig = (kolomNr == ONGELDIG) || (rijNr == ONGELDIG);
 
@@ -28,11 +35,11 @@ void toonKlikResultaat(int kolomNr, int rijNr) {
     println("Rij: " + rijNr + "   Kolom: " + kolomNr);
   }
 }
-
+// Deze methode returnt een kolomnummer
 int bepaalKolomNummer(int muisX) {
   int kolomNr = ONGELDIG;
 
-  int gridX = muisX - margeLinks;
+  int gridX = muisX - margeGridLinks;
   int gridIndexNr = gridX / (breedte);
 
   boolean geldig = (gridIndexNr >= 0 && gridIndexNr < 10);
@@ -50,10 +57,11 @@ int bepaalKolomNummer(int muisX) {
   return kolomNr;
 }
 
+// Deze methode return een rijnummer
 int bepaalRijNummer(int muisY) {
   int rijNr = ONGELDIG;
 
-  int gridY = muisY - margeBoven;
+  int gridY = muisY - margeGridBoven;
   int gridIndexNr = gridY / (hoogte);
 
   boolean geldig = (gridIndexNr >= 0 && gridIndexNr < 10);

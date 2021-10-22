@@ -5,9 +5,7 @@ final int HOOGTE = 3;
 final int KLEUR = 4;
 final int VORM = 5;
 
-final int GROEN = #00FF00;
-final int ROOD = #FF0000;
-
+// Deze methode ontvangt een 1D array en een string als parameter en tekent vervolgens een knop
 void tekenKnop(int[] data, String tekst) {
   int x = data[X];
   int y = data[Y];
@@ -28,6 +26,7 @@ void tekenKnop(int[] data, String tekst) {
   text(tekst, tekstX, tekstY);
 }
 
+// Deze methode ontvangt een array en een int en tekent vervolgens een rij van knoppen
 void tekenRij(int[] array, int y) {
   for (int teller = 0; teller < array.length; teller++) {
     //int balkX = (blokGrootte * teller) + (rijX * 4 - (blokGrootte * teller / 10));
@@ -53,6 +52,8 @@ void tekenRij(int[] array, int y) {
     text(array[teller], tekstX, tekstY);
   }
 }
+
+// Bij deze methode krijg je een return van true of false als de x en y coordinaten binnen een bepaalde knop zitten.
 boolean bepaalIsBinnenKnop(int [] knop, int muisX, int muisY) {
   int knopX = knop[X];
   int knopY = knop[Y];
@@ -66,6 +67,7 @@ boolean bepaalIsBinnenKnop(int [] knop, int muisX, int muisY) {
   return knopGeraakt;
 }
 
+// ?
 boolean bepaalIsBinnenVeld(int muisX, int muisY, int breedteVeld, int hoogteVeld, int kolomTeller, int rijTeller) {
   int veldNummerkolom = breedteVeld * kolomTeller;
   int veldNummerRij = (hoogteVeld * rijTeller) + margeBoven;
